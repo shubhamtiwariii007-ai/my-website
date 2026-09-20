@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>To Kasa Hai App Log</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      overflow: hidden;
+      background: #000;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+      height: 100vh;
+    }
+
+    /* =====================================
+       STAR BACKGROUND
+    ===================================== */
+
+    #space {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      z-index: 0;
+    }
+
+    /* =====================================
+       COMMON SCREEN
+    ===================================== */
+
+    .screen {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      text-align: center;
+      padding: 20px;
+
+      transition: opacity 0.8s ease;
+    }
+
+    /* =====================================
+       FIRST SCREEN
+    ===================================== */
+
+    #firstScreen {
+      opacity: 1;
+    }
+
+    #firstScreen.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .title {
+      font-size: clamp(2rem, 6vw, 5rem);
+      font-weight: 900;
+
+      letter-spacing: 3px;
+      text-transform: uppercase;
+
+      margin-bottom: 35px;
+
+      text-shadow:
+        0 0 10px rgba(255,255,255,0.9),
+        0 0 30px rgba(255,255,255,0.5),
+        0 0 60px rgba(255,255,255,0.3);
+    }
+
+    /* =====================================
+       NAME INPUT
+    ===================================== */
+
+    .input-box {
+      width: min(650px, 90vw);
+      height: 65px;
+
+      border: 2px solid rgba(255,255,255,0.8);
+      border-radius: 12px;
+
+      background: rgba(0,0,0,0.65);
+
+      box-shadow:
+        0 0 15px rgba(255,255,255,0.25),
+        inset 0 0 20px rgba(255,255,255,0.05);
+
+      display: flex;
+      align-items: center;
+
+      padding: 0 20px;
+    }
+
+    #nameInput {
+      width: 100%;
+      height: 100%;
+
+      border: none;
+      outline: none;
+
+      background: transparent;
+      color: #fff;
+
+      font-size: 1.2rem;
+      font-family: inherit;
+    }
+
+    #nameInput::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* =====================================
+       ENTER BUTTON
+    ===================================== */
+
+    #enterButton {
+      margin-top: 20px;
+
+      padding: 13px 40px;
+
+      border: 2px solid #fff;
+      border-radius: 10px;
+
+      background: transparent;
+      color: #fff;
+
+      font-size: 1rem;
+      font-weight: bold;
+
+      letter-spacing: 2px;
+
+      cursor: pointer;
+
+      transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        transform 0.2s ease,
+        box-shadow 0.3s ease;
+    }
+
+    #enterButton:hover {
+      background: #fff;
+      color: #000;
+
+      box-shadow:
+        0 0 15px #fff,
+        0 0 30px rgba(255,255,255,0.5);
+
+      transform: scale(1.05);
+    }
+
+    #enterButton:active {
+      transform: scale(0.95);
+    }
+
+    /* =====================================
+       ERROR MESSAGE
+    ===================================== */
+
+    #errorMessage {
+      margin-top: 15px;
+
+      color: #ff5c5c;
+
+      font-size: 0.95rem;
+
+      opacity: 0;
+
+      transition: opacity 0.3s ease;
+    }
+
+    #errorMessage.show {
+      opacity: 1;
+    }
+
+    /* =====================================
+       SECOND SCREEN
+    ===================================== */
+
+    #secondScreen {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #secondScreen.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .hello {
+      font-size: clamp(3rem, 10vw, 8rem);
+
+      font-weight: 900;
+
+      letter-spacing: 5px;
+
+      text-transform: uppercase;
+
+      text-shadow:
+        0 0 10px rgba(255,255,255,0.9),
+        0 0 30px rgba(255,255,255,0.6),
+        0 0 70px rgba(255,255,255,0.3);
+
+      animation: helloAppear 1s ease;
+    }
+
+    /* =====================================
+       PERSONAL MESSAGE
+    ===================================== */
+
+    .personal-message {
+      margin-top: 25px;
+
+      max-width: 850px;
+
+      font-size: clamp(1.1rem, 3vw, 2rem);
+
+      font-weight: 600;
+
+      line-height: 1.5;
+
+      color: #fff;
+
+      text-shadow:
+        0 0 10px rgba(255,255,255,0.6),
+        0 0 25px rgba(255,255,255,0.25);
+
+      animation: messageAppear 1.5s ease;
+    }
+
+    @keyframes helloAppear {
+      from {
+        opacity: 0;
+        transform: scale(0.7);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes messageAppear {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* =====================================
+       MOBILE
+    ===================================== */
+
+    @media (max-width: 600px) {
+
+      .title {
+        letter-spacing: 1px;
+        margin-bottom: 25px;
+      }
+
+      .input-box {
+        height: 58px;
+        padding: 0 15px;
+      }
+
+      #nameInput {
+        font-size: 1rem;
+      }
+
+      .hello {
+        letter-spacing: 2px;
+      }
+
+      .personal-message {
+        margin-top: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =====================================
+       STAR CANVAS
+  ===================================== -->
+
+  <canvas id="space"></canvas>
+
+
+  <!-- =====================================
+       FIRST SCREEN
+  ===================================== -->
+
+  <div class="screen" id="firstScreen">
+
+    <div class="title">
+      TO KASA HAI APP LOG
+    </div>
+
+    <div class="input-box">
+
+      <input
+        type="text"
+        id="nameInput"
+        placeholder="Enter your name..."
+        autocomplete="off"
+      >
+
+    </div>
+
+    <button id="enterButton">
+      ENTER
+    </button>
+
+    <div id="errorMessage">
+      Name not found. Please enter the correct name.
+    </div>
+
+  </div>
+
+
+  <!-- =====================================
+       SECOND SCREEN
+  ===================================== -->
+
+  <div class="screen" id="secondScreen">
+
+    <div class="hello" id="helloText">
+      HELLO
+    </div>
+
+    <div
+      class="personal-message"
+      id="personalMessage">
+    </div>
+
+  </div>
+
+
+  <script>
+
+    /* ==================================================
+       ⭐⭐ WRITE NAMES AND THEIR PERSONAL MESSAGES HERE ⭐⭐
+       ==================================================
+
+       IMPORTANT:
+
+       Left side  = person's name
+       Right side = message that person will see
+
+       Example:
+
+       "Rahul": "Rahul bhai, kya haal hai? 😂"
+
+       "Priya": "Priya, aapke liye special message ❤️"
+
+       You can add as many people as you want.
+    */
+
+
+    const people = {
+
+      "shubham":"owner of this webpage the real king",
+
+      "vaibhav":"Or ji Mr. speaker Itna handsome hona ka kaya faida agar abhi tak single he ho❤️",
+       
+      "shoraya":"Mr. Body Builder Tension Nahi Lana ka yak vaishnavi gai hai dusri aa jayagi",
+  
+       "sunny":"padhai kar la padhai assa nahi nikla ga IIT ",
+
+
+      
+
+      
+
+    };
+
+
+    /* ==================================================
+       ⭐ STARFIELD
+    ================================================== */
+
+    const canvas =
+      document.getElementById("space");
+
+    const ctx =
+      canvas.getContext("2d");
+
+    let width;
+    let height;
+
+    const stars = [];
+
+    const STAR_COUNT = 700;
+
+
+    function resizeCanvas() {
+
+      width =
+        canvas.width =
+        window.innerWidth;
+
+      height =
+        canvas.height =
+        window.innerHeight;
+
+    }
+
+
+    window.addEventListener(
+      "resize",
+      resizeCanvas
+    );
+
+    resizeCanvas();
+
+
+    function createStar() {
+
+      return {
+
+        x:
+          (Math.random() - 0.5)
+          * width,
+
+        y:
+          (Math.random() - 0.5)
+          * height,
+
+        z:
+          Math.random() * width,
+
+        pz: 0
+
+      };
+
+    }
+
+
+    for (
+      let i = 0;
+      i < STAR_COUNT;
+      i++
+    ) {
+
+      stars.push(
+        createStar()
+      );
+
+    }
+
+
+    function drawStars() {
+
+      ctx.fillStyle =
+        "rgba(0, 0, 0, 0.35)";
+
+      ctx.fillRect(
+        0,
+        0,
+        width,
+        height
+      );
+
+
+      const centerX =
+        width / 2;
+
+      const centerY =
+        height / 2;
+
+
+      for (
+        let i = 0;
+        i < stars.length;
+        i++
+      ) {
+
+        const star =
+          stars[i];
+
+
+        star.pz =
+          star.z;
+
+
+        // ⭐ Star movement speed
+        star.z -= 18;
+
+
+        // Reset star
+        if (star.z < 1) {
+
+          stars[i] =
+            createStar();
+
+          stars[i].z =
+            width;
+
+          continue;
+
+        }
+
+
+        const sx =
+          centerX +
+          (star.x / star.z)
+          * width;
+
+
+        const sy =
+          centerY +
+          (star.y / star.z)
+          * width;
+
+
+        const px =
+          centerX +
+          (star.x / star.pz)
+          * width;
+
+
+        const py =
+          centerY +
+          (star.y / star.pz)
+          * width;
+
+
+        const size =
+          Math.max(
+            0.5,
+            (1 - star.z / width)
+            * 4
+          );
+
+
+        const opacity =
+          Math.min(
+            1,
+            (1 - star.z / width)
+            + 0.2
+          );
+
+
+        ctx.beginPath();
+
+
+        ctx.strokeStyle =
+          `rgba(255,255,255,${opacity})`;
+
+
+        ctx.lineWidth =
+          size;
+
+
+        ctx.moveTo(
+          px,
+          py
+        );
+
+
+        ctx.lineTo(
+          sx,
+          sy
+        );
+
+
+        ctx.stroke();
+
+      }
+
+
+      requestAnimationFrame(
+        drawStars
+      );
+
+    }
+
+
+    drawStars();
+
+
+    /* ==================================================
+       PAGE ELEMENTS
+    ================================================== */
+
+    const firstScreen =
+      document.getElementById(
+        "firstScreen"
+      );
+
+
+    const secondScreen =
+      document.getElementById(
+        "secondScreen"
+      );
+
+
+    const nameInput =
+      document.getElementById(
+        "nameInput"
+      );
+
+
+    const enterButton =
+      document.getElementById(
+        "enterButton"
+      );
+
+
+    const helloText =
+      document.getElementById(
+        "helloText"
+      );
+
+
+    const personalMessage =
+      document.getElementById(
+        "personalMessage"
+      );
+
+
+    const errorMessage =
+      document.getElementById(
+        "errorMessage"
+      );
+
+
+    /* ==================================================
+       ENTER WEBSITE
+    ================================================== */
+
+    function enterWebsite() {
+
+      const enteredName =
+        nameInput.value.trim();
+
+
+      /*
+        Check whether the entered name
+        exists in our "people" object.
+      */
+
+      const matchedName =
+        Object.keys(people).find(
+          name =>
+            name.toLowerCase()
+            === enteredName.toLowerCase()
+        );
+
+
+      /* =================================
+         NAME NOT FOUND
+      ================================= */
+
+      if (!matchedName) {
+
+        errorMessage.classList.add(
+          "show"
+        );
+
+        nameInput.focus();
+
+        return;
+
+      }
+
+
+      /* Hide error */
+
+      errorMessage.classList.remove(
+        "show"
+      );
+
+
+      /* =================================
+         SHOW NAME
+      ================================= */
+
+      helloText.textContent =
+        "HELLO " + matchedName;
+
+
+      /* =================================
+         SHOW THAT PERSON'S MESSAGE
+      ================================= */
+
+      personalMessage.textContent =
+        people[matchedName];
+
+
+      /* =================================
+         CHANGE SCREEN
+      ================================= */
+
+      firstScreen.classList.add(
+        "hide"
+      );
+
+
+      setTimeout(() => {
+
+        secondScreen.classList.add(
+          "show"
+        );
+
+      }, 400);
+
+    }
+
+
+    /* ==================================================
+       ENTER BUTTON
+    ================================================== */
+
+    enterButton.addEventListener(
+      "click",
+      enterWebsite
+    );
+
+
+    /* ==================================================
+       ENTER KEY
+    ================================================== */
+
+    nameInput.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (event.key === "Enter") {
+
+          enterWebsite();
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
